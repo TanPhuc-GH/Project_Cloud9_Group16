@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- need catalog list and place list-->
 <html lang="vi">
 <head>
@@ -55,19 +56,21 @@
                         <h1 class="title__heading">Vui chơi & giải trí</h1>
                         <p class="title__description">Check in điểm tham quan nổi tiếng, khám phá tour và nhiều hơn nữa ở Việt Nam</p>
                     </div>
-                    <div class="header__search-box rounded-md">
+                    <form method="post" action="search" id="MainForm">
+                        <div class="header__search-box rounded-md">
 
-                        <i class="ti-search"></i>
+                            <i class="ti-search"></i>
 
-
-                        <input class="focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900
+                            <input id="SearchInput" class="focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900
                             rounded-md shadow-sm"
-                               type="text" aria-label="Filter projects" placeholder="Bạn muốn tham gia hoạt động gì ở VIỆT NAM ?">
+                                   type="text" aria-label="Filter projects" placeholder="Bạn muốn tham gia hoạt động gì ở VIỆT NAM ?">
 
-                        <button class="btn hover:bg-darkorange rounded-md bg-orange">
-                            <span>Tìm kiếm</span>
-                        </button>
-                    </div>
+                            <button type="submit" class="btn hover:bg-darkorange rounded-md bg-orange search-btn">
+                                <span>Tìm kiếm</span>
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -83,7 +86,7 @@
                     <div class="body__menu-items">
                         <c:forEach items = "${Catalogs}" var="item">
                             <div class="menu__item hover-effect">
-                                <a href="/Web_Project_MVC_war_exploded/cate?id=${item.catalogID}" class="menu__item-link">
+                                <a href="cate?id=${item.catalogID}" class="menu__item-link">
                                     <img src="${item.getCatalogImageUrl()}" alt="" class="menu__item-img">
                                     <span>${item.getCatalogName()}</span>
                                 </a>
@@ -109,7 +112,7 @@
                     <div class="top-destination__items">
 
                         <c:forEach items = "${Places}" var = "place">
-                            <a href="/Web_Project_MVC_war_exploded/city?id=${place.placeID}" class="top-destination__link ">
+                            <a href="city?id=${place.placeID}" class="top-destination__link ">
                                 <div class="top-destination__item hover-effect" style="background-image: url('${place.getPlaceImageUrl()}');">
                                     <div class="top-destination__item-cover"></div>
                                     <div class="top-destination__item-text">
@@ -123,7 +126,7 @@
                         </c:forEach>
                     </div>
 
-                        
+
 
                     </div>
                     <button class="top-destination__next-btn swipe__btn">
@@ -157,52 +160,53 @@
                                 </div>
                                 <h1 class="category-info__title" style="color:#FF9D26;">Bán chạy</h1>
                             </div>
-
-                           <a <c:if test="${tour != null}">href="product?id=${tour.Tour_Id}"</c:if> >
                                <div class="category-swiper-wrapper">
-
                                    <div class="category-swiper">
                                        <div class="category-swiper__items best-seller" id="BestSeller">
-                                           <div class="category-swiper__item-wrapper"  >
-                                               <div class="category-swiper__item">
-                                                   <div class="item__heading" style="background-image: url('https://res.klook.com/image/upload/c_fill,w_550,h_308/fl_lossy.progressive,q_85,f_auto/activities/lvnxfcz989rlat8jndf0.webp')">
-
-                                                   </div>
-                                                   <div class="item__body">
-                                                       <div class="item__body--top">
-                                                           <div class="item__title">
-                                                               <span>Vé Cáp Treo Sun World Ba Na Hills Đà Nẵng</span>
+                                           <c:forEach items="${Tours}" var="item">
+                                               <a href="tour?Id=${item.tourID}" class="category-swiper__item-wrapper" has-tag="${item.policy}" is-discounting="${item.tourOldPrice != null}">
+                                                   <div class="category-swiper__item hover-effect">
+                                                       <div class="item__heading" style="background-image: url('${item.defaultImage}')"></div>
+                                                       <div class="item__body">
+                                                           <div class="item__body--top">
+                                                               <div class="item__title">
+                                                                   <span>${item.tourName}</span>
+                                                               </div>
+                                                               <div class="item__activity">
+                                                                    <span class="item__activity-score">
+                                                                        <i class="fa-solid fa-star"></i>
+                                                                        <span class="activity-score__rate">4.8</span>
+                                                                    </span>
+                                                                   <span class="item__activity-review">
+                                                                        (
+                                                                        <span class="activity-review__number">15K+</span>
+                                                                    &nbsp;  đánh giá)
+                                                                   </span>
+                                                               </div>
                                                            </div>
-                                                           <div class="item__activity">
-                                                                <span class="item__activity-score">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <span class="activity-score__rate">4.7</span>
-                                                                </span>
-                                                               <span class="item__activity-review">
-                                                                    (
-                                                                        <span class="activity-review__number">15K+ </span>
-                                                                    &nbsp;đánh giá)
-                                                                </span>
-                                                           </div>
-                                                       </div>
-
-                                                       <div class="item__body--bottom">
-                                                           <div class="item-price-box">
-                                                               <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">835,000</span> </span>
-                                                               <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">850,000</span> </span>
-                                                           </div>
-                                                           <div class="item__tagging-wrapper">
-                                                               <div class="item__tagging item__tagging--disable">
-
-                                                                   <p>Chính sách đảm bảo về giá</p>
+                                                           <div class="item__body--bottom">
+                                                               <div class="item-price-box">
+                                                                   <span class="item-price-box__sell-price-box">₫&nbsp
+                                                                       <span class="sell-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                                   <span class="item-price-box__old-price-box">₫&nbsp
+                                                                       <span class="old-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourOldPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                               </div>
+                                                               <div class="item__tagging-wrapper">
+                                                                   <div class="item__tagging">
+                                                                       <p>Chính sách đảm bảo về giá</p>
+                                                                   </div>
                                                                </div>
                                                            </div>
                                                        </div>
                                                    </div>
-                                               </div>
-                                           </div>
-
-
+                                               </a>
+                                           </c:forEach>
                                        </div>
 
                                    </div>
@@ -232,43 +236,50 @@
 
                                 <div class="category-swiper">
                                     <div class="category-swiper__items best-seller" id="BookNow">
-                                        <div class="category-swiper__item-wrapper"  >
-                                            <div class="category-swiper__item">
-                                                <div class="item__heading" style="background-image: url('https://res.klook.com/image/upload/c_fill,w_550,h_308/fl_lossy.progressive,q_85,f_auto/activities/lvnxfcz989rlat8jndf0.webp')">
-                                                </div>
-                                                <div class="item__body">
-                                                    <div class="item__body--top">
-                                                        <div class="item__title">
-                                                            <span>Vé Cáp Treo Sun World Ba Na Hills Đà Nẵng</span>
+                                        <c:forEach items="${Tours}" var="item">
+                                            <a href="tour?Id=${item.tourID}" class="category-swiper__item-wrapper" has-tag="${item.policy}" is-discounting="${item.tourOldPrice != null}">
+                                                <div class="category-swiper__item hover-effect">
+                                                    <div class="item__heading" style="background-image: url('${item.defaultImage}')"></div>
+                                                    <div class="item__body">
+                                                        <div class="item__body--top">
+                                                            <div class="item__title">
+                                                                <span>${item.tourName}</span>
+                                                            </div>
+                                                            <div class="item__activity">
+                                                                    <span class="item__activity-score">
+                                                                        <i class="fa-solid fa-star"></i>
+                                                                        <span class="activity-score__rate">4.8</span>
+                                                                    </span>
+                                                                <span class="item__activity-review">
+                                                                        (
+                                                                        <span class="activity-review__number">15K+</span>
+                                                                    &nbsp;  đánh giá)
+                                                                   </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="item__activity">
-                                                                <span class="item__activity-score">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <span class="activity-score__rate">4.7</span>
-                                                                </span>
-                                                            <span class="item__activity-review">
-                                                                    (
-                                                                        <span class="activity-review__number">15K+ </span>
-                                                                    &nbsp;đánh giá)
-                                                                </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="item__body--bottom">
-                                                        <div class="item-price-box">
-                                                            <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">835,000</span> </span>
-                                                            <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">850,000</span> </span>
-                                                        </div>
-                                                        <div class="item__tagging-wrapper">
-                                                            <div class="item__tagging item__tagging--disable">
-
-                                                                <p>Chính sách đảm bảo về giá</p>
+                                                        <div class="item__body--bottom">
+                                                            <div class="item-price-box">
+                                                                   <span class="item-price-box__sell-price-box">₫&nbsp
+                                                                       <span class="sell-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                                <span class="item-price-box__old-price-box">₫&nbsp
+                                                                       <span class="old-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourOldPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                            </div>
+                                                            <div class="item__tagging-wrapper">
+                                                                <div class="item__tagging">
+                                                                    <p>Chính sách đảm bảo về giá</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </a>
+                                        </c:forEach>
 
 
                                     </div>
@@ -298,44 +309,50 @@
 
                                 <div class="category-swiper">
                                     <div class="category-swiper__items best-seller" id="NewActivity">
-                                        <div class="category-swiper__item-wrapper"  >
-                                            <div class="category-swiper__item">
-                                                <div class="item__heading" style="background-image: url('https://res.klook.com/image/upload/c_fill,w_550,h_308/fl_lossy.progressive,q_85,f_auto/activities/lvnxfcz989rlat8jndf0.webp')">
-
-                                                </div>
-                                                <div class="item__body">
-                                                    <div class="item__body--top">
-                                                        <div class="item__title">
-                                                            <span>Vé Cáp Treo Sun World Ba Na Hills Đà Nẵng</span>
+                                        <c:forEach items="${Tours}" var="item">
+                                            <a href="tour?Id=${item.tourID}" class="category-swiper__item-wrapper" has-tag="${item.policy}" is-discounting="${item.tourOldPrice != null}">
+                                                <div class="category-swiper__item hover-effect">
+                                                    <div class="item__heading" style="background-image: url('${item.defaultImage}')"></div>
+                                                    <div class="item__body">
+                                                        <div class="item__body--top">
+                                                            <div class="item__title">
+                                                                <span>${item.tourName}</span>
+                                                            </div>
+                                                            <div class="item__activity">
+                                                                    <span class="item__activity-score">
+                                                                        <i class="fa-solid fa-star"></i>
+                                                                        <span class="activity-score__rate">4.8</span>
+                                                                    </span>
+                                                                <span class="item__activity-review">
+                                                                        (
+                                                                        <span class="activity-review__number">15K+</span>
+                                                                    &nbsp;  đánh giá)
+                                                                   </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="item__activity">
-                                                                <span class="item__activity-score">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <span class="activity-score__rate">4.7</span>
-                                                                </span>
-                                                            <span class="item__activity-review">
-                                                                    (
-                                                                        <span class="activity-review__number">15K+ </span>
-                                                                    &nbsp;đánh giá)
-                                                                </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="item__body--bottom">
-                                                        <div class="item-price-box">
-                                                            <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">835,000</span> </span>
-                                                            <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">850,000</span> </span>
-                                                        </div>
-                                                        <div class="item__tagging-wrapper">
-                                                            <div class="item__tagging item__tagging--disable">
-
-                                                                <p>Chính sách đảm bảo về giá</p>
+                                                        <div class="item__body--bottom">
+                                                            <div class="item-price-box">
+                                                                   <span class="item-price-box__sell-price-box">₫&nbsp
+                                                                       <span class="sell-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                                <span class="item-price-box__old-price-box">₫&nbsp
+                                                                       <span class="old-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourOldPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                            </div>
+                                                            <div class="item__tagging-wrapper">
+                                                                <div class="item__tagging">
+                                                                    <p>Chính sách đảm bảo về giá</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </a>
+                                        </c:forEach>
 
 
                                     </div>
@@ -365,44 +382,50 @@
 
                                 <div class="category-swiper">
                                     <div class="category-swiper__items best-seller" id="Promotion">
-                                        <div class="category-swiper__item-wrapper"  >
-                                            <div class="category-swiper__item">
-                                                <div class="item__heading" style="background-image: url('https://res.klook.com/image/upload/c_fill,w_550,h_308/fl_lossy.progressive,q_85,f_auto/activities/lvnxfcz989rlat8jndf0.webp')">
-
-                                                </div>
-                                                <div class="item__body">
-                                                    <div class="item__body--top">
-                                                        <div class="item__title">
-                                                            <span>Vé Cáp Treo Sun World Ba Na Hills Đà Nẵng</span>
+                                        <c:forEach items="${Tours}" var="item">
+                                            <a href="tour?Id=${item.tourID}" class="category-swiper__item-wrapper" has-tag="${item.policy}" is-discounting="${item.tourOldPrice != null}">
+                                                <div class="category-swiper__item hover-effect">
+                                                    <div class="item__heading" style="background-image: url('${item.defaultImage}')"></div>
+                                                    <div class="item__body">
+                                                        <div class="item__body--top">
+                                                            <div class="item__title">
+                                                                <span>${item.tourName}</span>
+                                                            </div>
+                                                            <div class="item__activity">
+                                                                    <span class="item__activity-score">
+                                                                        <i class="fa-solid fa-star"></i>
+                                                                        <span class="activity-score__rate">4.8</span>
+                                                                    </span>
+                                                                <span class="item__activity-review">
+                                                                        (
+                                                                        <span class="activity-review__number">15K+</span>
+                                                                    &nbsp;  đánh giá)
+                                                                   </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="item__activity">
-                                                                <span class="item__activity-score">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <span class="activity-score__rate">4.7</span>
-                                                                </span>
-                                                            <span class="item__activity-review">
-                                                                    (
-                                                                        <span class="activity-review__number">15K+ </span>
-                                                                    &nbsp;đánh giá)
-                                                                </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="item__body--bottom">
-                                                        <div class="item-price-box">
-                                                            <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">835,000</span> </span>
-                                                            <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">850,000</span> </span>
-                                                        </div>
-                                                        <div class="item__tagging-wrapper">
-                                                            <div class="item__tagging item__tagging--disable">
-
-                                                                <p>Chính sách đảm bảo về giá</p>
+                                                        <div class="item__body--bottom">
+                                                            <div class="item-price-box">
+                                                                   <span class="item-price-box__sell-price-box">₫&nbsp
+                                                                       <span class="sell-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                                <span class="item-price-box__old-price-box">₫&nbsp
+                                                                       <span class="old-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourOldPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                            </div>
+                                                            <div class="item__tagging-wrapper">
+                                                                <div class="item__tagging">
+                                                                    <p>Chính sách đảm bảo về giá</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </a>
+                                        </c:forEach>
 
 
                                     </div>
@@ -432,44 +455,50 @@
 
                                 <div class="category-swiper">
                                     <div class="category-swiper__items best-seller" id="Dating">
-                                        <div class="category-swiper__item-wrapper"  >
-                                            <div class="category-swiper__item">
-                                                <div class="item__heading" style="background-image: url('https://res.klook.com/image/upload/c_fill,w_550,h_308/fl_lossy.progressive,q_85,f_auto/activities/lvnxfcz989rlat8jndf0.webp')">
-
-                                                </div>
-                                                <div class="item__body">
-                                                    <div class="item__body--top">
-                                                        <div class="item__title">
-                                                            <span>Vé Cáp Treo Sun World Ba Na Hills Đà Nẵng</span>
+                                        <c:forEach items="${Tours}" var="item">
+                                            <a href="tour?Id=${item.tourID}" class="category-swiper__item-wrapper" has-tag="${item.policy}" is-discounting="${item.tourOldPrice != null}">
+                                                <div class="category-swiper__item hover-effect">
+                                                    <div class="item__heading" style="background-image: url('${item.defaultImage}')"></div>
+                                                    <div class="item__body">
+                                                        <div class="item__body--top">
+                                                            <div class="item__title">
+                                                                <span>${item.tourName}</span>
+                                                            </div>
+                                                            <div class="item__activity">
+                                                                    <span class="item__activity-score">
+                                                                        <i class="fa-solid fa-star"></i>
+                                                                        <span class="activity-score__rate">4.8</span>
+                                                                    </span>
+                                                                <span class="item__activity-review">
+                                                                        (
+                                                                        <span class="activity-review__number">15K+</span>
+                                                                    &nbsp;  đánh giá)
+                                                                   </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="item__activity">
-                                                                <span class="item__activity-score">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <span class="activity-score__rate">4.7</span>
-                                                                </span>
-                                                            <span class="item__activity-review">
-                                                                    (
-                                                                        <span class="activity-review__number">15K+ </span>
-                                                                    &nbsp;đánh giá)
-                                                                </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="item__body--bottom">
-                                                        <div class="item-price-box">
-                                                            <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">835,000</span> </span>
-                                                            <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">850,000</span> </span>
-                                                        </div>
-                                                        <div class="item__tagging-wrapper">
-                                                            <div class="item__tagging item__tagging--disable">
-
-                                                                <p>Chính sách đảm bảo về giá</p>
+                                                        <div class="item__body--bottom">
+                                                            <div class="item-price-box">
+                                                                   <span class="item-price-box__sell-price-box">₫&nbsp
+                                                                       <span class="sell-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                                <span class="item-price-box__old-price-box">₫&nbsp
+                                                                       <span class="old-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourOldPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                            </div>
+                                                            <div class="item__tagging-wrapper">
+                                                                <div class="item__tagging">
+                                                                    <p>Chính sách đảm bảo về giá</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </a>
+                                        </c:forEach>
 
 
                                     </div>
@@ -499,44 +528,50 @@
 
                                 <div class="category-swiper">
                                     <div class="category-swiper__items best-seller" id="Children">
-                                        <div class="category-swiper__item-wrapper"  >
-                                            <div class="category-swiper__item">
-                                                <div class="item__heading" style="background-image: url('https://res.klook.com/image/upload/c_fill,w_550,h_308/fl_lossy.progressive,q_85,f_auto/activities/lvnxfcz989rlat8jndf0.webp')">
-
-                                                </div>
-                                                <div class="item__body">
-                                                    <div class="item__body--top">
-                                                        <div class="item__title">
-                                                            <span>Vé Cáp Treo Sun World Ba Na Hills Đà Nẵng</span>
+                                        <c:forEach items="${Tours}" var="item">
+                                            <a href="tour?Id=${item.tourID}" class="category-swiper__item-wrapper" has-tag="${item.policy}" is-discounting="${item.tourOldPrice != null}">
+                                                <div class="category-swiper__item hover-effect">
+                                                    <div class="item__heading" style="background-image: url('${item.defaultImage}')"></div>
+                                                    <div class="item__body">
+                                                        <div class="item__body--top">
+                                                            <div class="item__title">
+                                                                <span>${item.tourName}</span>
+                                                            </div>
+                                                            <div class="item__activity">
+                                                                    <span class="item__activity-score">
+                                                                        <i class="fa-solid fa-star"></i>
+                                                                        <span class="activity-score__rate">4.8</span>
+                                                                    </span>
+                                                                <span class="item__activity-review">
+                                                                        (
+                                                                        <span class="activity-review__number">15K+</span>
+                                                                    &nbsp;  đánh giá)
+                                                                   </span>
+                                                            </div>
                                                         </div>
-                                                        <div class="item__activity">
-                                                                <span class="item__activity-score">
-                                                                    <i class="fa-solid fa-star"></i>
-                                                                    <span class="activity-score__rate">4.7</span>
-                                                                </span>
-                                                            <span class="item__activity-review">
-                                                                    (
-                                                                        <span class="activity-review__number">15K+ </span>
-                                                                    &nbsp;đánh giá)
-                                                                </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="item__body--bottom">
-                                                        <div class="item-price-box">
-                                                            <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">835,000</span> </span>
-                                                            <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">850,000</span> </span>
-                                                        </div>
-                                                        <div class="item__tagging-wrapper">
-                                                            <div class="item__tagging item__tagging--disable">
-
-                                                                <p>Chính sách đảm bảo về giá</p>
+                                                        <div class="item__body--bottom">
+                                                            <div class="item-price-box">
+                                                                   <span class="item-price-box__sell-price-box">₫&nbsp
+                                                                       <span class="sell-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                                <span class="item-price-box__old-price-box">₫&nbsp
+                                                                       <span class="old-price__value">
+                                                                               <fmt:formatNumber type = "number" maxFractionDigits = "0" value = "${item.tourOldPrice}" />
+                                                                       </span>
+                                                                   </span>
+                                                            </div>
+                                                            <div class="item__tagging-wrapper">
+                                                                <div class="item__tagging">
+                                                                    <p>Chính sách đảm bảo về giá</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </a>
+                                        </c:forEach>
 
 
                                     </div>

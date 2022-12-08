@@ -94,7 +94,7 @@ public class UserDAO  {
         EntityTransaction trans = em.getTransaction();
         try{
             trans.begin();
-           em.persist(user);
+            em.persist(user);
             trans.commit();
         }catch (Exception e){
             e.printStackTrace();

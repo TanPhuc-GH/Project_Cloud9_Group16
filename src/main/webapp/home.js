@@ -140,7 +140,7 @@ const app = {
             img: 'https://res.klook.com/image/upload/c_fill,w_352,h_470/fl_lossy.progressive,q_85,f_auto/cities/pv8gftuu2hmdi7sghimz.webp',
             name: 'Đồng Hới - Quảng Bình'
         },
-        
+
         {
             img: 'https://res.klook.com/image/upload/c_fill,w_352,h_470/fl_lossy.progressive,q_85,f_auto/cities/h4frkpsjdbkbtm5ajtw1.webp',
             name: 'Cần Thơ - ĐB Sông Cửu Long'
@@ -228,6 +228,24 @@ const app = {
     promotionCurX: 0,
     datingCurX: 0,
     childrenCurX: 0,
+    engSub(str) {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        return str;
+    }
+    ,
     checkDiscounting(item) {
         if(item.oldPrice === '') {
             return false;
@@ -243,6 +261,35 @@ const app = {
 
             if(collection[i].attributes['has-tag'].value == "false") {
                 collection[i].querySelector('.item__tagging').style.display = 'none';
+            }
+        }
+    }
+    ,
+    redirectToSearchPageByKey(formElement) {
+        let searchBtn = formElement.querySelector('button');
+        let searchInput = formElement.querySelector('input');
+        searchBtn.onclick = (e) => {
+            e.preventDefault();
+            search();
+        }
+
+        searchInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                search();
+            }
+        });
+
+        function search() {
+            if(searchInput.value.trim() !== "") {
+                let searchValue = app.engSub(searchInput.value).toLowerCase().trim();
+                let searchValueArr = searchValue.replace(/\s+/g, ' ').split(' ');
+                let url = "";
+                searchValueArr.forEach(value => {
+                    url += value + '%';
+                })
+                url = url.slice(0, -1);
+                window.location.href = 'search?key=' + url;
             }
         }
     }
@@ -270,7 +317,60 @@ const app = {
         selectedElement.innerHTML = tagHtml ? tagHtml : '';
 
     },
+    afterFiltering() {
+        let searchList = $('#SearchList');
+        let activityCount = $('.search-result-container .activity-count span');
+        let searhListCollection = searchList.children;
 
+        let count = 0;
+
+        for(let i = 0; i < searhListCollection.length; i++) {
+            if(!searhListCollection[i].classList.contains('card--hidden') && !searhListCollection[i].classList.contains('card-place--hidden')) {
+                count++;
+            }
+        }
+        activityCount.innerHTML = count;
+
+        let i = 0, visibleCartIndex = 0;
+        while(i < searhListCollection.length) {
+            if(!searhListCollection[i].classList.contains('card--hidden') && !searhListCollection[i].classList.contains('card-place--hidden')) {
+                if((visibleCartIndex + 1) % 3 === 0) {
+                    searhListCollection[i].style.marginRight = 0 + 'px';
+                }
+                visibleCartIndex++;
+            }
+            i++;
+        }
+    }
+    ,
+    renderCartByPlace() {
+        let desNodeList = $$('#Destination .tree-list-item__node')
+        let cartList = $$('.category-swiper__item-wrapper');
+
+        desNodeList.forEach(node => {
+            if(node.querySelector('input').checked) {
+                cartList.forEach(cart => {
+
+                    if(!(cart.getAttribute("place-data") === node.querySelector('input').value)) {
+                        cart.classList.add('card-place--hidden')
+                    }
+                })
+            }
+        })
+
+
+
+
+    },
+    removeMarginRight() {
+        let cartList = $$('.category-swiper__item-wrapper');
+        Array.from(cartList).forEach(cart => {
+            if(cart.hasAttribute("style")) {
+                cart.removeAttribute("style");
+            }
+        })
+    }
+    ,
     renderHomePage() {
         // // Render menu
         // let renderMenu = this.menuItemIcon.reduce(function (html, item, i) {
@@ -303,55 +403,52 @@ const app = {
         // topDestination.innerHTML = renderTopDestination;
 
         // Render best seller items
-        let renderBestSeller = this.bestSeller.reduce((html, item, i) => {
-            return html + `
-                <div class="category-swiper__item-wrapper" has-tag="${item.hasTag}" is-discounting="${this.checkDiscounting(item)}" "  >
-
-                    <div class="category-swiper__item hover-effect">
-                        <div class="item__heading" style="background-image: url('${item.img}')">
-                            
-                        </div>
-                        <div class="item__body">
-                            <div class="item__body--top">
-                                <div class="item__title">
-                                    <span>${item.title}</span>
-                                </div>
-                                <div class="item__activity">
-                                    <span class="item__activity-score">
-                                        <i class="fa-solid fa-star"></i>
-                                        <span class="activity-score__rate">${item.rate}</span>
-                                    </span>
-                                    <span class="item__activity-review">
-                                        (
-                                            <span class="activity-review__number">${item.review}</span>
-                                        &nbsp;đánh giá)
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="item__body--bottom">
-                                <div class="item-price-box">
-                                    <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">${item.sellPrice}</span> </span>
-                                    <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">${item.oldPrice}</span> </span>
-                                </div>
-                                <div class="item__tagging-wrapper">
-                                    <div class="item__tagging">
-                                        <p>Chính sách đảm bảo về giá</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `
-        }, '');
-        bestSellerElement.innerHTML = renderBestSeller;
-
-        bookNowElement.innerHTML = renderBestSeller;
-        newActivityElement.innerHTML = renderBestSeller;
-        promotionElement.innerHTML = renderBestSeller;
-        datingElement.innerHTML = renderBestSeller;
-        childrenElement.innerHTML = renderBestSeller;
+        // let renderBestSeller = this.bestSeller.reduce((html, item, i) => {
+        //     return html + `
+        //         <div class="category-swiper__item-wrapper" has-tag="${item.hasTag}" is-discounting="${this.checkDiscounting(item)}">
+        //             <div class="category-swiper__item hover-effect">
+        //                 <div class="item__heading" style="background-image: url('${item.img}')"></div>
+        //                 <div class="item__body">
+        //                     <div class="item__body--top">
+        //                         <div class="item__title">
+        //                             <span>${item.title}</span>
+        //                         </div>
+        //                         <div class="item__activity">
+        //                             <span class="item__activity-score">
+        //                                 <i class="fa-solid fa-star"></i>
+        //                                 <span class="activity-score__rate">${item.rate}</span>
+        //                             </span>
+        //                             <span class="item__activity-review">
+        //                                 (
+        //                                     <span class="activity-review__number">${item.review}</span>
+        //                                 &nbsp;đánh giá)
+        //                             </span>
+        //                         </div>
+        //                     </div>
+        //
+        //                     <div class="item__body--bottom">
+        //                         <div class="item-price-box">
+        //                             <span class="item-price-box__sell-price-box">₫ &nbsp<span class="sell-price__value">${item.sellPrice}</span> </span>
+        //                             <span class="item-price-box__old-price-box">₫ &nbsp<span class="old-price__value">${item.oldPrice}</span> </span>
+        //                         </div>
+        //                         <div class="item__tagging-wrapper">
+        //                             <div class="item__tagging">
+        //                                 <p>Chính sách đảm bảo về giá</p>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     `
+        // }, '');
+        // bestSellerElement.innerHTML = renderBestSeller;
+        //
+        // bookNowElement.innerHTML = renderBestSeller;
+        // newActivityElement.innerHTML = renderBestSeller;
+        // promotionElement.innerHTML = renderBestSeller;
+        // datingElement.innerHTML = renderBestSeller;
+        // childrenElement.innerHTML = renderBestSeller;
 
         this.displayDiscountAndTag(bestSellerElement);
         this.displayDiscountAndTag(bookNowElement);
@@ -363,6 +460,8 @@ const app = {
 
     },
     renderSearchPage() {
+        const searchList = $('#SearchList');
+
         // Render destination list item
         // let destinationItems = this.topDestinationItem.map(({img, name}) => name);
         // let renderdestinationItems = destinationItems.reduce((html, item, index) => {
@@ -398,7 +497,6 @@ const app = {
         // categoryListItem.innerHTML = renderCategoryItems;
 
         // Render search list
-        const searchList = $('#SearchList');
         // let renderSearchList = this.bestSeller.reduce((html, item, index) => {
         //     return html + `
         //     <a href="/tour?Id" class="category-swiper__item-wrapper" has-tag="${item.hasTag}" is-discounting="${this.checkDiscounting(item)}">
@@ -441,27 +539,47 @@ const app = {
         // }, '');
         // searchList.innerHTML = renderSearchList;
 
-        const searhListCollection = searchList.children;
-        for (let i = 0; i < searhListCollection.length; i++) {
-            if((i + 1) % 3 === 0) {
-                searhListCollection[i].style.marginRight = 0 + 'px';
-            }
-        }
+        // const searhListCollection = searchList.children;
+        // for (let i = 0; i < searhListCollection.length; i++) {
+        //     if((i + 1) % 3 === 0) {
+        //         searhListCollection[i].style.marginRight = 0 + 'px';
+        //     }
+        // }
 
         // Display discount and tag on card
         this.displayDiscountAndTag(searchList);
 
-        // Render activity count
-        const activityCount = $('.search-result-container .activity-count span');
-        activityCount.innerHTML = searchList.children.length;
+        // // Render activity count
+        // const activityCount = $('.search-result-container .activity-count span');
+        // activityCount.innerHTML = searchList.children.length;
 
         // Render selected tag
         this.renderTagOnSearchPage();
 
-        // Render checked input
-
-
-
+        // Render tour by key
+        let url = window.location.search
+        if(url.includes('key')) {
+            let keyArr = url.slice(5).split('%');
+            let keyStr = '';
+            keyArr.forEach(key => {
+                keyStr += key + ' ';
+            })
+            keyStr = keyStr.trim();
+            let cartList = $$('.category-swiper__item-wrapper');
+            if(keyStr) {
+                Array.from(cartList).forEach(cart => {
+                    let cartTitleElement = cart.querySelector('.item__title span');
+                    if(!app.engSub(cartTitleElement.innerText).toLowerCase().includes(keyStr)) {
+                        cart.classList.add('card--hidden');
+                    }
+                })
+            }
+            app.afterFiltering();
+        }
+        else {
+            app.renderCartByPlace();
+            app.afterFiltering();
+        }
     },
 
     handleEventHomePage() {
@@ -505,98 +623,136 @@ const app = {
 
         }
 
+        let bestSellerItemAmount = bestSellerElement.querySelectorAll('.category-swiper__item-wrapper').length;
+        let bookNowItemAmount = bookNowElement.querySelectorAll('.category-swiper__item-wrapper').length;
+        let newActivityItemAmount = newActivityElement.querySelectorAll('.category-swiper__item-wrapper').length;
+        let promotionItemAmount = promotionElement.querySelectorAll('.category-swiper__item-wrapper').length;
+        let datingItemAmount = datingElement.querySelectorAll('.category-swiper__item-wrapper').length;
+        let childrenItemAmount = childrenElement.querySelectorAll('.category-swiper__item-wrapper').length;
+
+        let hideBSNextBtnValue = -(Math.floor(bestSellerItemAmount / 4) * 944);
+        let hideBNNextBtnValue = -(Math.floor(bookNowItemAmount / 4) * 944);
+        let hideNANextBtnValue = -(Math.floor(newActivityItemAmount / 4) * 944);
+        let hidePromotionNextBtnValue = -(Math.floor(promotionItemAmount / 4) * 944);
+        let hideDatingNextBtnValue = -(Math.floor(datingItemAmount / 4) * 944);
+        let hideChildrenNextBtnValue = -(Math.floor(childrenItemAmount / 4) * 944);
+
         // Handle event swipe best seller
         bestSellerNextBtn.onclick = () => {
             this.swipe(bestSellerElement, this.bestSellerCurX, -944);
             this.bestSellerCurX = this.bestSellerCurX - 944;
-            this.disPlaySwipeCardButton(this.bestSellerCurX, bestSellerNextBtn, bestSellerPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.bestSellerCurX, bestSellerNextBtn, bestSellerPrevBtn, hideBSNextBtnValue);
         }
 
         bestSellerPrevBtn.onclick = () => {
             this.swipe(bestSellerElement, this.bestSellerCurX, 944);
             this.bestSellerCurX = this.bestSellerCurX + 944;
-            this.disPlaySwipeCardButton(this.bestSellerCurX, bestSellerNextBtn, bestSellerPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.bestSellerCurX, bestSellerNextBtn, bestSellerPrevBtn, hideBSNextBtnValue);
         }
 
         // Handle event swipe book-now
         bookNowNextBtn.onclick = () => {
             this.swipe(bookNowElement, this.bookNowCurX, -944);
             this.bookNowCurX = this.bookNowCurX - 944;
-            this.disPlaySwipeCardButton(this.bookNowCurX, bookNowNextBtn, bookNowPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.bookNowCurX, bookNowNextBtn, bookNowPrevBtn, hideBNNextBtnValue);
         }
 
         bookNowPrevBtn.onclick = () => {
             this.swipe(bookNowElement, this.bookNowCurX, 944);
             this.bookNowCurX = this.bookNowCurX + 944;
-            this.disPlaySwipeCardButton(this.bookNowCurX, bookNowNextBtn, bookNowPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.bookNowCurX, bookNowNextBtn, bookNowPrevBtn, hideBNNextBtnValue);
         }
 
         // Handle event swipe new activity
         newActitityNextBtn.onclick = () => {
             this.swipe(newActivityElement, this.newActivityCurX, -944);
             this.newActivityCurX = this.newActivityCurX - 944;
-            this.disPlaySwipeCardButton(this.newActivityCurX, newActitityNextBtn, newActitityPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.newActivityCurX, newActitityNextBtn, newActitityPrevBtn, hideNANextBtnValue);
         }
 
         newActitityPrevBtn.onclick = () => {
             this.swipe(newActivityElement, this.newActivityCurX, 944);
             this.newActivityCurX = this.newActivityCurX + 944;
-            this.disPlaySwipeCardButton(this.newActivityCurX, newActitityNextBtn, newActitityPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.newActivityCurX, newActitityNextBtn, newActitityPrevBtn, hideNANextBtnValue);
         }
 
         // Handle event swipe promotion
         promotionNextBtn.onclick = () => {
             this.swipe(promotionElement, this.promotionCurX, -944);
             this.promotionCurX = this.promotionCurX - 944;
-            this.disPlaySwipeCardButton(this.promotionCurX, promotionNextBtn, promotionPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.promotionCurX, promotionNextBtn, promotionPrevBtn, hidePromotionNextBtnValue);
         }
 
         promotionPrevBtn.onclick = () => {
             this.swipe(promotionElement, this.promotionCurX, 944);
             this.promotionCurX = this.promotionCurX + 944;
-            this.disPlaySwipeCardButton(this.promotionCurX, promotionNextBtn, promotionPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.promotionCurX, promotionNextBtn, promotionPrevBtn, hidePromotionNextBtnValue);
         }
 
         // Handle event swipe dating
         datingNextBtn.onclick = () => {
             this.swipe(datingElement, this.datingCurX, -944);
             this.datingCurX = this.datingCurX - 944;
-            this.disPlaySwipeCardButton(this.datingCurX, datingNextBtn, datingPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.datingCurX, datingNextBtn, datingPrevBtn, hideDatingNextBtnValue);
         }
 
         datingPrevBtn.onclick = () => {
             this.swipe(datingElement, this.datingCurX, 944);
             this.datingCurX = this.datingCurX + 944;
-            this.disPlaySwipeCardButton(this.datingCurX, datingNextBtn, datingPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.datingCurX, datingNextBtn, datingPrevBtn, hideDatingNextBtnValue);
         }
 
         // Handle event swipe children
         childrenNextBtn.onclick = () => {
             this.swipe(childrenElement, this.childrenCurX, -944);
             this.childrenCurX = this.childrenCurX - 944;
-            this.disPlaySwipeCardButton(this.childrenCurX, childrenNextBtn, childrenPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.childrenCurX, childrenNextBtn, childrenPrevBtn, hideChildrenNextBtnValue);
         }
 
         childrenPrevBtn.onclick = () => {
             this.swipe(childrenElement, this.childrenCurX, 944);
             this.childrenCurX = this.childrenCurX + 944;
-            this.disPlaySwipeCardButton(this.childrenCurX, childrenNextBtn, childrenPrevBtn, -944);
+            this.disPlaySwipeCardButton(this.childrenCurX, childrenNextBtn, childrenPrevBtn, hideChildrenNextBtnValue);
         }
 
         // Handle event click suggestion-filter item
         const filterOptionItem = $$('#SortBySuggestion .filter__option-item');
         filterOptionItem.forEach((item, index) => {
         })
+
+        // Handle event search
+        let headerForm = $('#HeaderForm');
+        let mainForm = $('#MainForm');
+        this.redirectToSearchPageByKey(headerForm);
+        this.redirectToSearchPageByKey(mainForm);
     },
     handleEventSearchPage() {
         // Event click node
+        let searchList = $('#SearchList');
         let nodeList = $$('.tree-list-item__node');
+        let cateNodeList = $$('#Category .tree-list-item__node')
+        let desNodeList = $$('#Destination .tree-list-item__node')
+
+
         Array.from(nodeList).forEach((node, index) => {
             node.onclick = () => {
+                this.removeMarginRight();
+                cartList.forEach(cart => {
+                    if(cart.classList.contains('card-place--hidden')) {
+                        cart.classList.remove('card-place--hidden')
+                    }
+                })
+                app.renderCartByPlace();
+                app.afterFiltering()
                 app.renderTagOnSearchPage();
                 displaySelectedTagElement();
+
+
+
             }
         })
+
+
 
 
         // Event click 'Clear Selection'
@@ -634,8 +790,8 @@ const app = {
             fillColor();
         }
         function fillColor(){
-            percent1 = (sliderOne.value / sliderMaxValue) * 100;
-            percent2 = (sliderTwo.value / sliderMaxValue) * 100;
+            let percent1 = (sliderOne.value / sliderMaxValue) * 100;
+            let percent2 = (sliderTwo.value / sliderMaxValue) * 100;
             sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #ff5b00 ${percent1}% , #ff5b00 ${percent2}%, #dadae5 ${percent2}%)`;
         }
         sliderOne.oninput = slideOne;
@@ -646,10 +802,28 @@ const app = {
         let priceRangeValue = $('.filter-btn__label');
         let priceRangeElement = $('#PriceFilter');
         let acceptBtn = $('#AcceptBtn');
+        let cartList = $$('.category-swiper__item-wrapper');
+
         acceptBtn.onclick = () => {
             priceRangeValue.textContent = '₫' + `${displayValOne.innerText}` + ' - ' + '₫' + `${displayValTwo.innerText}`;
             priceRangeElement.style.backgroundColor = '#ff5b00';
             priceRangeElement.style.color = '#fff';
+            deletePriceFilter();
+            this.removeMarginRight();
+            let reservePrice = parseInt(displayValOne.innerText);
+            let endPrice = parseInt(displayValTwo.innerText);
+            Array.from(cartList).forEach(cart => {
+                if(cart.style.display !== 'none') {
+                    let cartPrice = parseInt(cart.querySelector('.sell-price__value').innerText.split('.').reduce(function(init, value) {
+                        return init + value;
+                    }, ''));
+
+                    if(cartPrice > endPrice || cartPrice < reservePrice) {
+                        cart.classList.add('card--hidden')
+                    }
+                }
+            })
+            this.afterFiltering();
         }
         // Event click reset button
         let resetBtn = $('#ResetBtn');
@@ -661,10 +835,24 @@ const app = {
             slideOne();
             sliderTwo.value = 500000;
             slideTwo();
+            deletePriceFilter();
+            this.removeMarginRight();
+            this.afterFiltering();
+        }
 
+        function deletePriceFilter() {
+            Array.from(cartList).forEach(cart => {
+                if(cart.classList.contains('card--hidden')) {
+                    cart.classList.remove('card--hidden');
+                }
+            })
         }
 
 
+
+        // Handle event search
+        let headerFrom = $('#HeaderForm');
+        this.redirectToSearchPageByKey(headerFrom);
 
 
 
@@ -676,7 +864,7 @@ const app = {
         let totalBill = 0;
         let totalAmount = 0;
         cartItemList.forEach(item => {
-            if(item.style.display !== 'none') {
+            if(item.querySelector('input').checked) {
                 totalAmount++;
                 totalBill += parseInt(item.querySelector('.item-price').innerText);
             }
@@ -691,9 +879,9 @@ const app = {
         let deleteAllTag = $('.delete-all');
         let itemCheckBoxList = $$('.item-checkbox')
         let deleteItemTagList = $$('.delete-item');
-        let cartItemList = $$('.cart_item');
-        let totalAmountElement = $('#totalAmountNumber');
-        let totalPriceElement = $('#totalPrice');
+        // let cartItemList = $$('.cart_item');
+        // let totalAmountElement = $('#totalAmountNumber');
+        // let totalPriceElement = $('#totalPrice');
 
         // Handle event click all-checkbox
         allCheckBox.onclick = () => {
@@ -716,34 +904,39 @@ const app = {
         deleteAllTag.onclick = () => {
             itemCheckBoxList.forEach(item => {
                 if(item.checked) {
-                    item.closest('.cart_item').style.display = 'none';
+                    item.closest('.cart_item').remove();
                 }
             })
-            updatePaymentContent();
-
+            app.renderCartPage();
         }
 
         // Handle event click delete item tag
         deleteItemTagList.forEach(item => {
             item.onclick = () => {
-                item.closest('.cart_item').style.display = 'none';
-                updatePaymentContent();
+                item.closest('.cart_item').remove();
+                app.renderCartPage();
             }
 
         })
 
-        function updatePaymentContent() {
-            let totalBill = 0;
-            let totalAmount = 0;
-            cartItemList.forEach(item => {
-                if(item.style.display !== 'none') {
-                    totalAmount++;
-                    totalBill += parseInt(item.querySelector('.item-price').innerText);
-                }
-            })
-            totalAmountElement.innerText = totalAmount;
-            totalPriceElement.innerText = totalBill;
-        }
+        itemCheckBoxList.forEach(item => {
+            item.onchange = () => {
+                app.renderCartPage();
+            }
+        })
+
+        // function updatePaymentContent() {
+        //     let totalBill = 0;
+        //     let totalAmount = 0;
+        //     cartItemList.forEach(item => {
+        //         if(item.querySelector('input').checked) {
+        //             totalAmount++;
+        //             totalBill += parseInt(item.querySelector('.item-price').innerText);
+        //         }
+        //     })
+        //     totalAmountElement.innerText = totalAmount;
+        //     totalPriceElement.innerText = totalBill;
+        // }
 
     },
     swipe(selector, curX, addValue) {
@@ -772,7 +965,7 @@ const app = {
 
     },
     startCartPage() {
-        this.renderCartPage();
+        //this.renderCartPage();
         this.handleEventCartPage();
     }
 }

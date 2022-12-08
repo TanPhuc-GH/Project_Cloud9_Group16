@@ -27,45 +27,47 @@
         <nav class="navbar">
             <div class="navbar--left">
                 <a href="index"><img class="navbar__logo" src="./img/logo.png"></a>
-                <div class="navbar__search-box">
-                    <input type="text" class="search-box__input" placeholder="Tìm theo điểm đến, hoạt động">
+                <form method="post" action="search" id="HeaderForm">
+                    <div class="navbar__search-box">
+                        <input type="text" class="search-box__input" placeholder="Tìm theo điểm đến, hoạt động">
+                        <button type="submit" class="search-box__btn">
+                            <i class="ti-search"></i>
+                        </button>
 
-                    <button class="search-box__btn">
-                        <i class="ti-search"></i>
-                    </button>
+                        <div class="search-box-recommendation-wrapper">
+                            <div class="search-box-recommendation">
+                                <div class="search-group">
+                                    <p class="search-box__heading">Lịch sử tìm kiếm</p>
+                                    <ul class="search-box__list">
+                                        <li class="search-box__item">hồ chí minh</li>
+                                        <li class="search-box__item">săn mây đà lạt</li>
+                                    </ul>
+                                </div>
 
-                    <div class="search-box-recommendation-wrapper">
-                        <div class="search-box-recommendation">
-                            <div class="search-group">
-                                <p class="search-box__heading">Lịch sử tìm kiếm</p>
-                                <ul class="search-box__list">
-                                    <li class="search-box__item">hồ chí minh</li>
-                                    <li class="search-box__item">săn mây đà lạt</li>
-                                </ul>
+                                <div class="search-group">
+                                    <p class="search-box__heading">Phổ biến nhất</p>
+                                    <ul class="search-box__list">
+                                        <li class="search-box__item">sim thai lan</li>
+                                        <li class="search-box__item">thai lan</li>
+                                        <li class="search-box__item">seoul</li>
+                                        <li class="search-box__item">phuket</li>
+
+                                        <li class="search-box__item">sapa</li>
+
+                                        <li class="search-box__item">bali</li>
+                                        <li class="search-box__item">da nang</li>
+
+                                        <li class="search-box__item">ba na hill</li>
+
+                                        <li class="search-box__item">bali</li>
+                                    </ul>
+                                </div>
+
                             </div>
-
-                            <div class="search-group">
-                                <p class="search-box__heading">Phổ biến nhất</p>
-                                <ul class="search-box__list">
-                                    <li class="search-box__item">sim thai lan</li>
-                                    <li class="search-box__item">thai lan</li>
-                                    <li class="search-box__item">seoul</li>
-                                    <li class="search-box__item">phuket</li>
-
-                                    <li class="search-box__item">sapa</li>
-
-                                    <li class="search-box__item">bali</li>
-                                    <li class="search-box__item">da nang</li>
-
-                                    <li class="search-box__item">ba na hill</li>
-
-                                    <li class="search-box__item">bali</li>
-                                </ul>
-                            </div>
-
                         </div>
                     </div>
-                </div>
+                </form>
+
             </div>
             <div class="navbar--right">
                 <div class="navbar-item">
@@ -88,14 +90,7 @@
                     </div>
                 <% } else {%>
                     <div class="navbar-item cart-item navbar-item--logined">
-                        <a href="#" class="navbar-link">Giỏ hàng</a>
-                        <div class="navbar-cart-wrapper dropdown-wrapper">
-                            <div class="navbar-cart--empty">
-                                <img src="./img/cart-svgrepo-com.svg" alt="">
-                                <span>Giỏ hàng đang trống</span>
-                                <button class="cart-item__btn hover:bg-darkorange">Xem giỏ hàng</button>
-                            </div>
-                        </div>
+                        <a href="cart" class="navbar-link">Giỏ hàng</a>
                     </div>
 
                     <div class="navbar-item navbar-item--logined">
@@ -109,7 +104,7 @@
                             <div class="navbar-user-option dropdown-wrapper">
                                 <ul class="user__option-list">
                                     <li class="user__option-item">
-                                        <a href="" class="">
+                                        <a href="history" class="">
                                             Đơn hàng
                                         </a>
                                     </li>
