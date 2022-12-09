@@ -221,7 +221,6 @@
                             <th scope="col">Tour Old Price</th>
                             <th scope="col">Policy</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Default Image</th>
                         </tr>
 
                         </thead>
@@ -233,12 +232,10 @@
                                 <td>${tour.getTourOldPrice()}</td>
                                 <td>${tour.getPolicy()}</td>
                                 <td>${tour.getTourDescription()}</td>
-                                <td>${tour.getDefaultImage()}</td>
                                     <%--                                    <td><a class="btn btn-sm btn-primary" onclick="EditTour(${tour.getTourID()})">Edit</a></td>--%>
                             </tr>
                         </c:forEach>
                         <tr>
-                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -290,17 +287,14 @@
                                 <input id = "TourSchedule" name="TourSchedule" type="text" class="form-control" id="validationDefault05" placeholder="Schedule">
                             </div>
                             <span id = "tourId"></span>
-                            <div class="col-md-3 mb-3">
-                                <label for="validationDefault05">Default Image</label>
-                           <input id = "DefaultImage"  name="DefaultImage" type="text"  placeholder ="Default Imange" class="form-control">
+
                             <div id="newInputfield">
-                            </div>
                                 <%--                                    <input type="text" style="margin:10px;" class="form-control" id="newInput" placeholder="Image Url" required>--%>
                             </div>
                         </div>
 
                         <label>Place</label>
-                        <select class="form-select" name="place"  id="form_Place" style="margin: 10px;" aria-label="Default select example" required>
+                        <select class="form-select" name="place"  id="form_Place" style="margin: 10px;" aria-label="Default select example">
                             <c:forEach items = "${places}" var="place">
                                 <option value="${place.getPlaceID()}">${place.getPlaceName()}</option>
                             </c:forEach>
@@ -380,7 +374,6 @@
             let tourOldPrice = $(row).find('td').eq(2).html();
             let tourPolicy = $(row).find('td').eq(3).html();
             let tourDescription = $(row).find('td').eq(4).html();
-            let defaultImage =  $(row).find('td').eq(5).html();
             //alert(row + tourName + tourPrice + tourOldPrice + tourPolicy +  tourDescription)
             let trid = $(this).closest('tr').attr('id'); // table row ID
             if(trid){
@@ -391,10 +384,9 @@
             document.getElementById("TourOldPrice").value = tourOldPrice
             document.getElementById("TourPolicy").value = tourPolicy
             document.getElementById("TourDescription").value = tourDescription
-            document.getElementById("DefaultImage").value =defaultImage
 
             let button = document.getElementById("buttonAction")
-            if(tourName.length ==0 || tourName == null){
+            if(tourName.length ==0){
 
                 document.getElementById("form_action").action = "admin?action=add";
                 button.innerHTML = "ADD"

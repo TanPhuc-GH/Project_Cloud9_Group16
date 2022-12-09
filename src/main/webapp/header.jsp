@@ -98,6 +98,13 @@
                 <% } else {%>
                     <div class="navbar-item cart-item navbar-item--logined">
                         <a href="cart" class="navbar-link">Giỏ hàng</a>
+                        <div class="navbar-cart-wrapper dropdown-wrapper">
+                            <div class="navbar-cart--empty">
+                                <img src="./img/cart-svgrepo-com.svg" alt="">
+                                <span>Giỏ hàng đang trống</span>
+                                <button class="cart-item__btn hover:bg-darkorange">Xem giỏ hàng</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="navbar-item navbar-item--logined">
@@ -111,7 +118,7 @@
                             <div class="navbar-user-option dropdown-wrapper">
                                 <ul class="user__option-list">
                                     <li class="user__option-item">
-                                        <a href="history" class="">
+                                        <a href="" class="">
                                             Đơn hàng
                                         </a>
                                     </li>

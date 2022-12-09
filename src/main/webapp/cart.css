@@ -182,6 +182,11 @@ body {
 
 .footer-operator a:nth-child(1) {
     padding: 0 12px 0 68px;
+    border-right: 1px solid #eee;
+}
+
+.footer-operator a:nth-child(2) {
+    padding-left: 10px;
 }
 
 .footer-price {
@@ -229,8 +234,8 @@ body {
     margin: 16px 0;
     color: #fff;
     outline: none;
-    background-color: #FF5B00!important;
-    border: 1px solid #FF5B00!important;
+    background-color: #FF5B00;
+    border: 1px solid #FF5B00;
 }
 
 .pay-now-btn:hover {

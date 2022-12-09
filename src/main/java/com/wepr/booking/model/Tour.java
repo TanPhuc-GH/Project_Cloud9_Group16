@@ -14,9 +14,7 @@ public class Tour {
     @Column(nullable = false)
     private Boolean policy;
     private String tourDescription;
-    private String tourSchedule;
-
-    private String defaultImage;
+    private  String tourSchedule;
     @ManyToOne
     @JoinColumn(name = "fk_placeID")
     private Place place;
@@ -60,12 +58,5 @@ public class Tour {
 
     public void setPlace(Place place) {
         this.place = place;
-    }
-    public String getDefaultImage() {
-        return defaultImage;
-    }
-
-    public void setDefaultImage(String defaultImage) {
-        this.defaultImage = defaultImage;
     }
 }
