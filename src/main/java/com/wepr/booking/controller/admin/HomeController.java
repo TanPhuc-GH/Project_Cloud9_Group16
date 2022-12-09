@@ -9,10 +9,7 @@ import com.wepr.booking.model.Catalog;
 import com.wepr.booking.model.Place;
 import com.wepr.booking.model.Tour;
 import com.wepr.booking.model.User;
-import com.wepr.booking.utils.EmailUtility;
 
-import javax.mail.MessagingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,17 +22,6 @@ import java.util.Optional;
 
 @WebServlet(name = "HomeController",  urlPatterns= {"/home","/login","/register","/logout"})
 public class HomeController extends HttpServlet {
-    private String host;
-    private String port;
-    private String username;
-    private String mailPassword;
-    public void init() {
-        ServletContext context = getServletContext();
-        host = context.getInitParameter("host");
-        port = context.getInitParameter("port");
-        username = context.getInitParameter("email");
-        mailPassword = context.getInitParameter("pass");
-    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -53,12 +39,12 @@ public class HomeController extends HttpServlet {
                     url = "/Login.jsp";
                     break;
                 case "home":
-                    url = "/index.jsp";
+                    url = "/home.jsp";
                     break;
                 case "logout":
                     HttpSession session = request.getSession();
                     session.invalidate();
-                    url = "/index.jsp";
+                    url = "/home.jsp";
                     break;
                 default:
                     break;
@@ -89,7 +75,7 @@ public class HomeController extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", oUser.get());
                     request.setAttribute("user",oUser.get());
-                    if(oUser.get().getIsAdmin() ==true ){
+                    if(oUser.get().getIsAdmin() !=null ){
                         userDAO = new UserDAO();
                         List<User> users = userDAO.getUsers();
 
@@ -127,8 +113,7 @@ public class HomeController extends HttpServlet {
                 user.setPassword(request.getParameter("password"));
                 String confirmPassword = request.getParameter("confirmPassword");
                 request.setAttribute("user", user);
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
+
                 url = "/Login.jsp";
                 if(!user.getPassword().equals(confirmPassword)){
                     url = "/register.jsp";
@@ -138,20 +123,7 @@ public class HomeController extends HttpServlet {
                     request.setAttribute("error", "");
                     userDAO = new UserDAO();
                     if(userDAO.IsValid(user.getEmail(), user.getUserName())){
-
-                        url ="/otp.jsp";
-                        session = request.getSession();
-                        session.setAttribute("User", user);
-                        session.setAttribute("OTP", EmailUtility.randomOtp());
-                        try {
-                            EmailUtility.sendEmail(host,port,username,mailPassword,user.getEmail(),
-                                    "Use this otp to activate your account", (String) session.getAttribute("OTP"));
-                            url = "/OTP.jsp";
-                        } catch (MessagingException e) {
-                            request.setAttribute("error", "please try again");
-                            url = "/register.jsp";
-                        }
-                        //userDAO.insertUsers(user);
+                        userDAO.insertUsers(user);
                     }else{
                         request.setAttribute("error", "email or user name has existed");
                         url = "/register.jsp";
