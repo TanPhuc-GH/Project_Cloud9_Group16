@@ -29,7 +29,14 @@
                 <a href="index"><img class="navbar__logo" src="./img/logo.png"></a>
                 <form method="post" action="search" id="HeaderForm">
                     <div class="navbar__search-box">
-                        <input type="text" class="search-box__input" placeholder="Tìm theo điểm đến, hoạt động">
+                        <c:if test="${key == null}">
+                            <input type="text" class="search-box__input" placeholder="Tìm theo điểm đến, hoạt động">
+                        </c:if>
+
+                        <c:if test="${key != null}">
+                            <input value="${key}" type="text" class="search-box__input" placeholder="Tìm theo điểm đến, hoạt động">
+                        </c:if>
+
                         <button type="submit" class="search-box__btn">
                             <i class="ti-search"></i>
                         </button>
@@ -91,6 +98,13 @@
                 <% } else {%>
                     <div class="navbar-item cart-item navbar-item--logined">
                         <a href="cart" class="navbar-link">Giỏ hàng</a>
+                        <div class="navbar-cart-wrapper dropdown-wrapper">
+                            <div class="navbar-cart--empty">
+                                <img src="./img/cart-svgrepo-com.svg" alt="">
+                                <span>Giỏ hàng đang trống</span>
+                                <button class="cart-item__btn hover:bg-darkorange">Xem giỏ hàng</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="navbar-item navbar-item--logined">
@@ -104,7 +118,7 @@
                             <div class="navbar-user-option dropdown-wrapper">
                                 <ul class="user__option-list">
                                     <li class="user__option-item">
-                                        <a href="history" class="">
+                                        <a href="" class="">
                                             Đơn hàng
                                         </a>
                                     </li>

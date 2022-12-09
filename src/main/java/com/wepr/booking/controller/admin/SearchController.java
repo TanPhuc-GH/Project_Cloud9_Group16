@@ -25,7 +25,6 @@ public class SearchController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
         CatalogDAO catalog = new CatalogDAO();
         TourDAO tour = new TourDAO();
         PlaceDAO place = new PlaceDAO();
@@ -46,6 +45,18 @@ public class SearchController extends HttpServlet {
         }
         else if(servletPath.contains("cate")) {
             request.setAttribute("cateHtmlID", itemID);
+        }
+        else {
+            String[] keyArr = request.getQueryString().substring(4).split("%");
+            String keyString = "";
+            for(int i = 0; i < keyArr.length; i++) {
+                keyString += keyArr[i] + " ";
+            }
+            keyString = keyString.trim();
+            request.setAttribute("key", keyString);
+
+            System.out.println(request.getQueryString());
+            System.out.println(keyString);
         }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/search.jsp");
