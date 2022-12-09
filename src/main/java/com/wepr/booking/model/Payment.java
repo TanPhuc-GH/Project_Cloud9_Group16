@@ -13,10 +13,19 @@ public class Payment {
     @Column(nullable = false)
     private Double paymentTotal;
     @Column(nullable = false)
-    private Date datePayment;
-    @OneToMany(cascade = CascadeType.ALL)
+    private String datePayment;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
     @JoinColumn(name = "fk_userID")
-    private Set<User> users;
+    private User user;
 
     public Integer getPaymentID() {
         return paymentID;
@@ -34,19 +43,13 @@ public class Payment {
         this.paymentTotal = paymentTotal;
     }
 
-    public Date getDatePayment() {
+    public String getDatePayment() {
         return datePayment;
     }
 
-    public void setDatePayment(Date datePayment) {
+    public void setDatePayment(String datePayment) {
         this.datePayment = datePayment;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 }
