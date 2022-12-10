@@ -1,7 +1,7 @@
 # NHÓM 16
 Thành viên:
 Nguyễn Duy Thanh - 20110565\n
-Nguyễn Tuấn Trung - 20110\n
+Nguyễn Tuấn Trung - 20161388\n
 Trương Tấn Phúc - 20110544\n
 # ĐỀ TÀI : TÌM HIỂU VÀ XÂY DỰNG ỨNG DỤNG MINH HỌA DỊCH VỤ AWS CLOUD9
 
