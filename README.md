@@ -1,20 +1,20 @@
 # NHÓM 16
 Thành viên:
-Nguyễn Duy Thanh - 20110565\n
-Nguyễn Tuấn Trung - 20161388\n
-Trương Tấn Phúc - 20110544\n
+- Nguyễn Duy Thanh - 20110565
+- Nguyễn Tuấn Trung - 20161388
+- Trương Tấn Phúc - 20110544
 # ĐỀ TÀI : TÌM HIỂU VÀ XÂY DỰNG ỨNG DỤNG MINH HỌA DỊCH VỤ AWS CLOUD9
 
 # AWS CLOUD9 LÀ GÌ ?
-AWS Cloud9 là môi trường phát triển tích hợp (IDE) dựa trên đám mây cho phép bạn viết, chạy và gỡ lỗi mã chỉ bằng một trình duyệt. Môi trường này bao gồm một trình soạn mã, trình gỡ lỗi và thiết bị đầu cuối. Cloud9 được trang bị sẵn các công cụ thiết yếu cho các ngôn ngữ lập trình phổ biến, bao gồm JavaScript, Python, PHP và nhiều ngôn ngữ khác, nhờ vậy bạn không cần cài đặt tệp hoặc cấu hình máy phát triển để bắt đầu các dự án mới. Vì IDE Cloud9 là nền tảng dựa trên đám mây, nên bạn có thể làm việc với các dự án từ văn phòng, nhà hoặc bất cứ nơi đâu thông qua máy được kết nối với internet\n
-# LỢI ÍCH CỦA DỊCH VỤ CLOUD 9
-  - Viết mã chỉ bằng một trình duyệt \n
-  - Viết mã cùng nhau trong thời gian thực \n
-  - Xây dựng các ứng dụng Serverless một cách dễ dàng \n
-  - Chuyển truy cập thiết bị đầu cuối đến AWS \n
-  - Bắt đầu dự án mới nhanh chóng \n
+AWS Cloud9 là môi trường phát triển tích hợp (IDE) dựa trên đám mây cho phép bạn viết, chạy và gỡ lỗi mã chỉ bằng một trình duyệt. Môi trường này bao gồm một trình soạn mã, trình gỡ lỗi và thiết bị đầu cuối. Cloud9 được trang bị sẵn các công cụ thiết yếu cho các ngôn ngữ lập trình phổ biến, bao gồm JavaScript, Python, PHP và nhiều ngôn ngữ khác, nhờ vậy bạn không cần cài đặt tệp hoặc cấu hình máy phát triển để bắt đầu các dự án mới. Vì IDE Cloud9 là nền tảng dựa trên đám mây, nên bạn có thể làm việc với các dự án từ văn phòng, nhà hoặc bất cứ nơi đâu thông qua máy được kết nối với internet
+# LỢI ÍCH CỦA DỊCH VỤ CLOUD9
+  - Viết mã chỉ bằng một trình duyệt 
+  - Viết mã cùng nhau trong thời gian thực 
+  - Xây dựng các ứng dụng Serverless một cách dễ dàng 
+  - Chuyển truy cập thiết bị đầu cuối đến AWS 
+  - Bắt đầu dự án mới nhanh chóng 
 # CÁC DỊCH VỤ KHÁC ĐƯỢC SỬ DỤNG TRONG ỨNG DỤNG
-- Amazon EC2: dịch vụ cung cấp các máy tính ảo để người dùng chạy các ứng dụng máy tính của riêng họ \n
+- Amazon EC2: dịch vụ cung cấp các máy tính ảo để người dùng chạy các ứng dụng máy tính của riêng họ
 - Amazon RDS: dịch vụ giúp người dùng dễ dàng thiết lập, vận hành và thay đổi quy mô cơ sở dữ liệu trên đám mây
 
 # XÂY DỰNG ỨNG DỤNG MINH HỌA
